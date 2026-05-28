@@ -1,0 +1,27 @@
+<%- include('partials/header') %>
+<main>
+    <h1><%= title %></h1>
+
+    <div class="detail-card">
+        <p><strong>Description:</strong> <%= project.description %></p>
+        <p><strong>Date:</strong> <%= new Date(project.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+        <p><strong>Location:</strong> <%= project.location %></p>
+        <p>
+            <strong>Partner Organization:</strong>
+            <a href="/organization/<%= project.organization_id %>"><%= project.organization_name %></a>
+        </p>
+        <p>
+            <strong>Categories:</strong>
+            <% if (categories && categories.length > 0) { %>
+                <span class="tags">
+                    <% categories.forEach(category => { %>
+                        <a href="/category/<%= category.category_id %>" class="tag"><%= category.name %></a>
+                    <% }); %>
+                </span>
+            <% } else { %>
+                <span>No categories assigned to this project.</span>
+            <% } %>
+        </p>
+    </div>
+</main>
+<%- include('partials/footer') %>

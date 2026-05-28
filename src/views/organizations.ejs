@@ -1,0 +1,23 @@
+<%- include('partials/header') %>
+<main>
+    <h1><%= title %></h1>
+
+    <% if (organizations && organizations.length > 0) { %>
+        <ul>
+            <% organizations.forEach(organization => { %>
+                <li>
+                    <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo">
+                    <div>
+                        <a href="/organization/<%= organization.organization_id %>">
+                            <strong><%= organization.name %></strong>
+                        </a>
+                        <p><%= organization.description %></p>
+                    </div>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No partner organizations found.</p>
+    <% } %>
+</main>
+<%- include('partials/footer') %>
