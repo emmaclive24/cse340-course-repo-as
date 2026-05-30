@@ -6,6 +6,9 @@
         <img src="/images/<%= organization.logo_filename %>" alt="<%= organization.name %> logo" class="org-logo">
         <p><strong>Description:</strong> <%= organization.description %></p>
         <p><strong>Contact:</strong> <a href="mailto:<%= organization.contact_email %>"><%= organization.contact_email %></a></p>
+        <p>
+            <a href="/edit-organization/<%= organization.organization_id %>" class="btn">Edit Organization</a>
+        </p>
     </div>
 
     <h2>Service Projects</h2>

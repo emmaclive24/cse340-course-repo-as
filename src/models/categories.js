@@ -35,4 +35,35 @@ const getCategoriesByProjectId = async (projectId) => {
     return result.rows;
 };
 
-export { getAllCategories, getCategoryById, getCategoriesByProjectId };
+/**
+ * Assigns a single category to a project in the many-to-many table.
+ * (Not exported — used internally by updateCategoryAssignments.)
+ */
+const assignCategoryToProject = async (projectId, categoryId) => {
+    const query = `
+        INSERT INTO project_category (project_id, category_id)
+        VALUES ($1, $2)
+        ON CONFLICT DO NOTHING
+    `;
+    await db.query(query, [projectId, categoryId]);
+};
+
+/**
+ * Replaces all category assignments for a project.
+ * Deletes existing assignments then inserts the new set.
+ * @param {number} projectId
+ * @param {number[]} categoryIds - Array of category IDs to assign
+ */
+const updateCategoryAssignments = async (projectId, categoryIds) => {
+    // Remove all existing assignments for this project
+    await db.query('DELETE FROM project_category WHERE project_id = $1', [projectId]);
+
+    // Insert new assignments
+    if (Array.isArray(categoryIds) && categoryIds.length > 0) {
+        for (const categoryId of categoryIds) {
+            await assignCategoryToProject(projectId, categoryId);
+        }
+    }
+};
+
+export { getAllCategories, getCategoryById, getCategoriesByProjectId, updateCategoryAssignments };

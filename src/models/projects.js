@@ -90,10 +90,63 @@ const getProjectsByCategoryId = async (categoryId) => {
     return result.rows;
 };
 
+/**
+ * Creates a new service project in the database.
+ * @param {string} title
+ * @param {string} description
+ * @param {string} location
+ * @param {string} date
+ * @param {number} organizationId
+ * @returns {number} The ID of the newly created project
+ */
+const createProject = async (title, description, location, date, organizationId) => {
+    const query = `
+        INSERT INTO service_project (title, description, location, date, organization_id)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING project_id
+    `;
+    const result = await db.query(query, [title, description, location, date, organizationId]);
+
+    if (result.rows.length === 0) {
+        throw new Error('Failed to create project');
+    }
+    if (process.env.ENABLE_SQL_LOGGING === 'true') {
+        console.log('Created new project with ID:', result.rows[0].project_id);
+    }
+    return result.rows[0].project_id;
+};
+
+/**
+ * Updates an existing service project in the database.
+ * @param {number} id
+ * @param {string} title
+ * @param {string} description
+ * @param {string} location
+ * @param {string} date
+ * @param {number} organizationId
+ */
+const updateProject = async (id, title, description, location, date, organizationId) => {
+    const query = `
+        UPDATE service_project
+        SET title = $1,
+            description = $2,
+            location = $3,
+            date = $4,
+            organization_id = $5
+        WHERE project_id = $6
+    `;
+    await db.query(query, [title, description, location, date, organizationId, id]);
+    if (process.env.ENABLE_SQL_LOGGING === 'true') {
+        console.log('Updated project with ID:', id);
+    }
+};
+
 export {
     getAllProjects,
     getUpcomingProjects,
     getProjectById,
     getProjectsByOrganizationId,
-    getProjectsByCategoryId
+    getProjectsByCategoryId,
+    createProject,
+    updateProject
 };
