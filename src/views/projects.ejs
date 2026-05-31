@@ -1,0 +1,30 @@
+<%- include('partials/header') %>
+<main>
+    <h1><%= title %></h1>
+
+    <% if (projects && projects.length > 0) { %>
+        <ul>
+            <% projects.forEach(project => { %>
+                <li>
+                    <div>
+                        <a href="/project/<%= project.project_id %>">
+                            <strong><%= project.title %></strong>
+                        </a>
+                        <span class="meta">
+                            <%= new Date(project.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %>
+                             — 
+                            <a href="/organization/<%= project.organization_id %>"><%= project.organization_name %></a>
+                        </span>
+                    </div>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No upcoming service projects at this time.</p>
+    <% } %>
+
+    <% if (user && user.role_name === 'admin') { %>
+        <p><a href="/new-project" class="btn">Add a new service project</a></p>
+    <% } %>
+</main>
+<%- include('partials/footer') %>

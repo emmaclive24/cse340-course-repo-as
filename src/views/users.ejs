@@ -1,0 +1,33 @@
+<%- include('partials/header') %>
+<main>
+    <h1><%= title %></h1>
+    <p>All registered users in the system:</p>
+
+    <% if (users && users.length > 0) { %>
+        <table class="users-table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+                    <th>Registered</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(u => { %>
+                    <tr>
+                        <td><%= u.name %></td>
+                        <td><%= u.email %></td>
+                        <td><span class="tag"><%= u.role_name %></span></td>
+                        <td><%= new Date(u.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    <% } else { %>
+        <p>No users found.</p>
+    <% } %>
+
+    <p style="margin-top: 1.5rem;"><a href="/dashboard" class="btn">Back to Dashboard</a></p>
+</main>
+<%- include('partials/footer') %>

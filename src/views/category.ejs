@@ -1,0 +1,21 @@
+<%- include('partials/header') %>
+<main>
+    <h1><%= title %></h1>
+    <p>All service projects in the <strong><%= category.name %></strong> category:</p>
+
+    <% if (projects && projects.length > 0) { %>
+        <ul>
+            <% projects.forEach(project => { %>
+                <li>
+                    <a href="/project/<%= project.project_id %>">
+                        <strong><%= project.title %></strong>
+                    </a>
+                    <span class="meta"> — <%= new Date(project.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) %> | <%= project.location %></span>
+                </li>
+            <% }); %>
+        </ul>
+    <% } else { %>
+        <p>No service projects found for this category.</p>
+    <% } %>
+</main>
+<%- include('partials/footer') %>
