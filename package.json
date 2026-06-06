@@ -5,13 +5,8 @@
   "description": "Backend development assignment for CSE 340",
   "main": "server.js",
   "scripts": {
-<<<<<<< HEAD
-    "start": "node server.js",
-    "dev": "nodemon server.js"
-=======
     "start": "node --env-file=.env server.js",
     "dev": "nodemon"
->>>>>>> a52ab31 (week 5 fix)
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
