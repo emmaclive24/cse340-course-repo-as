@@ -1,8 +1,39 @@
+<<<<<<< HEAD
 import { getAllCategories, getCategoryById, getCategoriesByProjectId, updateCategoryAssignments } from '../models/categories.js';
 import { getProjectsByCategoryId } from '../models/projects.js';
 import { getProjectById } from '../models/projects.js';
 
 // Display the list of all categories
+=======
+import { body, validationResult } from 'express-validator';
+import {
+    getAllCategories,
+    getCategoryById,
+    getCategoriesByProjectId,
+    createCategory,
+    updateCategory,
+    updateCategoryAssignments
+} from '../models/categories.js';
+import { getProjectsByCategoryId, getProjectById } from '../models/projects.js';
+
+// ─── Validation rules ──────────────────────────────────────────────────────────
+
+/**
+ * Server-side validation for the category name.
+ * NOTE: minlength (3) is intentionally NOT added to the client-side HTML so
+ * that server-side validation can be demonstrated independently.
+ */
+const categoryValidation = [
+    body('name')
+        .trim()
+        .notEmpty().withMessage('Category name is required')
+        .isLength({ min: 3, max: 100 })
+        .withMessage('Category name must be between 3 and 100 characters')
+];
+
+// ─── Categories list ───────────────────────────────────────────────────────────
+
+>>>>>>> a52ab31 (week 5 fix)
 const showCategoriesPage = async (req, res, next) => {
     try {
         const categories = await getAllCategories();
@@ -12,7 +43,12 @@ const showCategoriesPage = async (req, res, next) => {
     }
 };
 
+<<<<<<< HEAD
 // Display the details page for a single category
+=======
+// ─── Category details ──────────────────────────────────────────────────────────
+
+>>>>>>> a52ab31 (week 5 fix)
 const showCategoryDetailsPage = async (req, res, next) => {
     try {
         const categoryId = req.params.id;
@@ -36,7 +72,85 @@ const showCategoryDetailsPage = async (req, res, next) => {
     }
 };
 
+<<<<<<< HEAD
 // GET /project/:projectId/assign-categories — show the assign-categories form
+=======
+// ─── Create new category ───────────────────────────────────────────────────────
+
+const showNewCategoryForm = (req, res) => {
+    res.render('new-category', { title: 'Add New Category' });
+};
+
+const processNewCategoryForm = async (req, res, next) => {
+    try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            errors.array().forEach((error) => {
+                req.flash('error', error.msg);
+            });
+            return res.redirect('/new-category');
+        }
+
+        const { name } = req.body;
+        await createCategory(name);
+        req.flash('success', 'Category created successfully!');
+        res.redirect('/categories');
+    } catch (error) {
+        if (error.code === '23505') {
+            req.flash('error', 'A category with that name already exists.');
+            return res.redirect('/new-category');
+        }
+        next(error);
+    }
+};
+
+// ─── Edit existing category ────────────────────────────────────────────────────
+
+const showEditCategoryForm = async (req, res, next) => {
+    try {
+        const categoryId = req.params.id;
+        const category = await getCategoryById(categoryId);
+
+        if (!category) {
+            const err = new Error('Category Not Found');
+            err.status = 404;
+            return next(err);
+        }
+
+        res.render('edit-category', { title: 'Edit Category', category });
+    } catch (error) {
+        next(error);
+    }
+};
+
+const processEditCategoryForm = async (req, res, next) => {
+    try {
+        const categoryId = req.params.id;
+
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            errors.array().forEach((error) => {
+                req.flash('error', error.msg);
+            });
+            return res.redirect(`/edit-category/${categoryId}`);
+        }
+
+        const { name } = req.body;
+        await updateCategory(categoryId, name);
+        req.flash('success', 'Category updated successfully!');
+        res.redirect('/categories');
+    } catch (error) {
+        if (error.code === '23505') {
+            req.flash('error', 'A category with that name already exists.');
+            return res.redirect(`/edit-category/${req.params.id}`);
+        }
+        next(error);
+    }
+};
+
+// ─── Assign categories to project ──────────────────────────────────────────────
+
+>>>>>>> a52ab31 (week 5 fix)
 const showAssignCategoriesForm = async (req, res, next) => {
     try {
         const projectId = req.params.projectId;
@@ -62,17 +176,26 @@ const showAssignCategoriesForm = async (req, res, next) => {
     }
 };
 
+<<<<<<< HEAD
 // POST /project/:projectId/assign-categories — process the category assignment
+=======
+>>>>>>> a52ab31 (week 5 fix)
 const processAssignCategoriesForm = async (req, res, next) => {
     try {
         const projectId = req.params.projectId;
 
+<<<<<<< HEAD
         // categories may be undefined (none selected), a string (one), or an array (many)
+=======
+>>>>>>> a52ab31 (week 5 fix)
         let categoryIds = req.body.categories || [];
         if (!Array.isArray(categoryIds)) {
             categoryIds = [categoryIds];
         }
+<<<<<<< HEAD
         // Convert to integers
+=======
+>>>>>>> a52ab31 (week 5 fix)
         categoryIds = categoryIds.map(Number).filter(Boolean);
 
         await updateCategoryAssignments(projectId, categoryIds);
@@ -84,8 +207,18 @@ const processAssignCategoriesForm = async (req, res, next) => {
 };
 
 export {
+<<<<<<< HEAD
     showCategoriesPage,
     showCategoryDetailsPage,
+=======
+    categoryValidation,
+    showCategoriesPage,
+    showCategoryDetailsPage,
+    showNewCategoryForm,
+    processNewCategoryForm,
+    showEditCategoryForm,
+    processEditCategoryForm,
+>>>>>>> a52ab31 (week 5 fix)
     showAssignCategoriesForm,
     processAssignCategoriesForm
 };

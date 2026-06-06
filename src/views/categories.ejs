@@ -9,11 +9,27 @@
                     <a href="/category/<%= category.category_id %>">
                         <strong><%= category.name %></strong>
                     </a>
+<<<<<<< HEAD
+=======
+                    <% if (user && user.role_name === 'admin') { %>
+                        &nbsp;—&nbsp;
+                        <a href="/edit-category/<%= category.category_id %>" class="btn btn-sm">Edit</a>
+                    <% } %>
+>>>>>>> a52ab31 (week 5 fix)
                 </li>
             <% }); %>
         </ul>
     <% } else { %>
         <p>No categories found.</p>
     <% } %>
+<<<<<<< HEAD
+=======
+
+    <% if (user && user.role_name === 'admin') { %>
+        <p style="margin-top: 1.5rem;">
+            <a href="/new-category" class="btn">Add a New Category</a>
+        </p>
+    <% } %>
+>>>>>>> a52ab31 (week 5 fix)
 </main>
 <%- include('partials/footer') %>

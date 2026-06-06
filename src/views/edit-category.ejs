@@ -1,0 +1,26 @@
+<%- include('partials/header') %>
+<main>
+    <h1><%= title %></h1>
+
+    <form action="/edit-category/<%= category.category_id %>" method="POST" class="form-card">
+        <div class="form-group">
+            <label for="name">Category Name</label>
+            <input
+                type="text"
+                id="name"
+                name="name"
+                value="<%= category.name %>"
+                maxlength="100"
+                required
+                placeholder="Enter category name"
+            />
+            <small class="hint">Between 3 and 100 characters.</small>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn">Update Category</button>
+            <a href="/categories" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</main>
+<%- include('partials/footer') %>

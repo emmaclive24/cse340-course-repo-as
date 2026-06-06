@@ -21,8 +21,18 @@ import {
     projectValidation
 } from './controllers/projects.js';
 import {
+<<<<<<< HEAD
     showCategoriesPage,
     showCategoryDetailsPage,
+=======
+    categoryValidation,
+    showCategoriesPage,
+    showCategoryDetailsPage,
+    showNewCategoryForm,
+    processNewCategoryForm,
+    showEditCategoryForm,
+    processEditCategoryForm,
+>>>>>>> a52ab31 (week 5 fix)
     showAssignCategoriesForm,
     processAssignCategoriesForm
 } from './controllers/categories.js';
@@ -69,7 +79,11 @@ router.post('/new-organization', requireLogin, requireRole('admin'), organizatio
 router.get('/edit-organization/:id', requireLogin, requireRole('admin'), showEditOrganizationForm);
 router.post('/edit-organization/:id', requireLogin, requireRole('admin'), organizationValidation, processEditOrganizationForm);
 
+<<<<<<< HEAD
 // ─── Projects (upcoming) and Services (all) ───────────────────────────────────
+=======
+// ─── Projects / Services ──────────────────────────────────────────────────────
+>>>>>>> a52ab31 (week 5 fix)
 router.get('/projects', showProjectsPage);
 router.get('/services', showServicesPage);
 router.get('/project/:id', showProjectDetailsPage);
@@ -86,6 +100,17 @@ router.post('/edit-project/:id', requireLogin, requireRole('admin'), projectVali
 router.get('/categories', showCategoriesPage);
 router.get('/category/:id', showCategoryDetailsPage);
 
+<<<<<<< HEAD
+=======
+// Create new category (admin only)
+router.get('/new-category', requireLogin, requireRole('admin'), showNewCategoryForm);
+router.post('/new-category', requireLogin, requireRole('admin'), categoryValidation, processNewCategoryForm);
+
+// Edit existing category (admin only)
+router.get('/edit-category/:id', requireLogin, requireRole('admin'), showEditCategoryForm);
+router.post('/edit-category/:id', requireLogin, requireRole('admin'), categoryValidation, processEditCategoryForm);
+
+>>>>>>> a52ab31 (week 5 fix)
 // Assign categories to a project (admin only)
 router.get('/project/:projectId/assign-categories', requireLogin, requireRole('admin'), showAssignCategoriesForm);
 router.post('/project/:projectId/assign-categories', requireLogin, requireRole('admin'), processAssignCategoriesForm);

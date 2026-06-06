@@ -1,5 +1,10 @@
 import db from './db.js';
 
+<<<<<<< HEAD
+=======
+// ─── Read ──────────────────────────────────────────────────────────────────────
+
+>>>>>>> a52ab31 (week 5 fix)
 // Retrieve all categories
 const getAllCategories = async () => {
     const query = `
@@ -35,6 +40,58 @@ const getCategoriesByProjectId = async (projectId) => {
     return result.rows;
 };
 
+<<<<<<< HEAD
+=======
+// ─── Create ────────────────────────────────────────────────────────────────────
+
+/**
+ * Inserts a new category into the database.
+ * @param {string} name - The category name.
+ * @returns {number} The ID of the newly created category.
+ */
+const createCategory = async (name) => {
+    const query = `
+        INSERT INTO category (name)
+        VALUES ($1)
+        RETURNING category_id
+    `;
+    const result = await db.query(query, [name]);
+    if (result.rows.length === 0) {
+        throw new Error('Failed to create category');
+    }
+    if (process.env.ENABLE_SQL_LOGGING === 'true') {
+        console.log('Created new category with ID:', result.rows[0].category_id);
+    }
+    return result.rows[0].category_id;
+};
+
+// ─── Update ────────────────────────────────────────────────────────────────────
+
+/**
+ * Updates an existing category in the database.
+ * @param {number} categoryId
+ * @param {string} name
+ */
+const updateCategory = async (categoryId, name) => {
+    const query = `
+        UPDATE category
+        SET name = $1
+        WHERE category_id = $2
+        RETURNING category_id
+    `;
+    const result = await db.query(query, [name, categoryId]);
+    if (result.rows.length === 0) {
+        throw new Error('Category not found');
+    }
+    if (process.env.ENABLE_SQL_LOGGING === 'true') {
+        console.log('Updated category with ID:', categoryId);
+    }
+    return result.rows[0].category_id;
+};
+
+// ─── Assign categories ─────────────────────────────────────────────────────────
+
+>>>>>>> a52ab31 (week 5 fix)
 /**
  * Assigns a single category to a project in the many-to-many table.
  * (Not exported — used internally by updateCategoryAssignments.)
@@ -52,6 +109,7 @@ const assignCategoryToProject = async (projectId, categoryId) => {
  * Replaces all category assignments for a project.
  * Deletes existing assignments then inserts the new set.
  * @param {number} projectId
+<<<<<<< HEAD
  * @param {number[]} categoryIds - Array of category IDs to assign
  */
 const updateCategoryAssignments = async (projectId, categoryIds) => {
@@ -59,6 +117,12 @@ const updateCategoryAssignments = async (projectId, categoryIds) => {
     await db.query('DELETE FROM project_category WHERE project_id = $1', [projectId]);
 
     // Insert new assignments
+=======
+ * @param {number[]} categoryIds
+ */
+const updateCategoryAssignments = async (projectId, categoryIds) => {
+    await db.query('DELETE FROM project_category WHERE project_id = $1', [projectId]);
+>>>>>>> a52ab31 (week 5 fix)
     if (Array.isArray(categoryIds) && categoryIds.length > 0) {
         for (const categoryId of categoryIds) {
             await assignCategoryToProject(projectId, categoryId);
@@ -66,4 +130,15 @@ const updateCategoryAssignments = async (projectId, categoryIds) => {
     }
 };
 
+<<<<<<< HEAD
 export { getAllCategories, getCategoryById, getCategoriesByProjectId, updateCategoryAssignments };
+=======
+export {
+    getAllCategories,
+    getCategoryById,
+    getCategoriesByProjectId,
+    createCategory,
+    updateCategory,
+    updateCategoryAssignments
+};
+>>>>>>> a52ab31 (week 5 fix)

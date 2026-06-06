@@ -25,7 +25,10 @@ const processUserRegistrationForm = async (req, res) => {
         res.redirect('/login');
     } catch (error) {
         if (error.code === '23505') {
+<<<<<<< HEAD
             // Unique constraint violation — duplicate email
+=======
+>>>>>>> a52ab31 (week 5 fix)
             req.flash('error', 'An account with that email already exists.');
         } else {
             console.error('Registration error:', error.message);
@@ -70,13 +73,23 @@ const processLoginForm = async (req, res) => {
 
 /**
  * Destroys the session and logs the user out.
+<<<<<<< HEAD
+=======
+ * FIX: Flash must be set BEFORE session.destroy() because the session
+ * is gone after destroy() completes. We use res.redirect after destroying.
+>>>>>>> a52ab31 (week 5 fix)
  */
 const processLogout = (req, res) => {
     req.session.destroy((err) => {
         if (err) {
             console.error('Session destroy error:', err.message);
         }
+<<<<<<< HEAD
         req.flash('success', 'You have been logged out.');
+=======
+        // After session is destroyed we cannot use req.flash() —
+        // instead redirect directly; a new session will start on the next request.
+>>>>>>> a52ab31 (week 5 fix)
         res.redirect('/login');
     });
 };
@@ -98,15 +111,23 @@ const showDashboard = (req, res) => {
  * Renders the admin users list page.
  * Protected by requireLogin + requireRole('admin') middleware.
  */
+<<<<<<< HEAD
 const showUsersPage = async (req, res) => {
+=======
+const showUsersPage = async (req, res, next) => {
+>>>>>>> a52ab31 (week 5 fix)
     try {
         const users = await getAllUsers();
         res.render('users', { title: 'All Users', users });
     } catch (error) {
+<<<<<<< HEAD
         console.error('Users page error:', error.message);
         const err = new Error('Failed to load users.');
         err.status = 500;
         throw err;
+=======
+        next(error);
+>>>>>>> a52ab31 (week 5 fix)
     }
 };
 
@@ -129,9 +150,17 @@ const requireLogin = (req, res, next) => {
  * Returns a middleware function that redirects to / with a flash message
  * if the user does not have the required role.
  *
+<<<<<<< HEAD
  * This must be a factory (function that returns a function) because the
  * required role name must be passed as a parameter. A standard middleware
  * function has no way to accept custom parameters.
+=======
+ * This must be a factory (function returning a function) so that the required
+ * role name can be passed as a parameter at route-definition time.
+ *
+ * @param {string} role - The role name required (e.g. 'admin')
+ * @returns {Function} Express middleware function
+>>>>>>> a52ab31 (week 5 fix)
  */
 const requireRole = (role) => {
     return (req, res, next) => {
